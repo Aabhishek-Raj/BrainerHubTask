@@ -1,6 +1,6 @@
 import { useState, useEffect, ChangeEvent, MouseEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { register, reset } from '../features/user/userSlice'
 import { AppDispatch, RootState } from '../redux/store'
@@ -116,10 +116,12 @@ const Register = () => {
 
                 <p className="text-center text-lg">
                     Have an account?
+                    <Link to={'/login'}>
                     <a
                         href="#"
                         className="font-medium text-indigo-500 underline-offset-4 hover:underline"
                     > Sign in</a>
+                    </Link>
                 </p>
             </section>
         </main >
