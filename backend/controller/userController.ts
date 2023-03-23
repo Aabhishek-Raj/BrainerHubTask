@@ -3,14 +3,15 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { User } from '../models/userModel'
 import asyncHandler from 'express-async-handler'
+import { ErrorResponse } from "../response/errorResponse"
 
-export const signupUser = asyncHandler(async(req: Request, res: Response) => {
+export const signupUser = asyncHandler( async (req: Request, res: Response) => {
 
     const { name, email, password } = req.body
 
     if (!name || !email || !password) {
       res.status(400)
-      throw new Error('Please add all fields')
+      throw new ErrorResponse('Please add all fields')
     }
   
     // Check if user exists
@@ -18,7 +19,7 @@ export const signupUser = asyncHandler(async(req: Request, res: Response) => {
   
     if (userExists) {
       res.status(400)
-      throw new Error('User already exists')
+      throw new ErrorResponse('User already exists')
     }
   
     // Hash password
@@ -33,15 +34,22 @@ export const signupUser = asyncHandler(async(req: Request, res: Response) => {
     })
   
     if (user) {
-      res.status(201).json({
-        _id: user.id,
-        name: user.name,
-        email: user.email,
-        token: generateToken(user._id),
-      })
+      const response = {
+        status: 1,
+        data: {
+          _id: user.id,
+          name: user.name,
+          email: user.email,
+          token: generateToken(user._id),
+        },
+        message: 'User created successfully',
+      }
+
+      res.status(201).json(response)
+
     } else {
       res.status(400)
-      throw new Error('Invalid user data')
+      throw new ErrorResponse('Invalid user data')
     }
 })
 
